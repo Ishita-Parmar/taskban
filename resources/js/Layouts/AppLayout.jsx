@@ -23,7 +23,7 @@ export default function AppLayout({ children }) {
                 
                 {/* Navigation Links */}
                 <nav className="flex-1 p-3 space-y-1">
-                    <Link to="/" className="flex items-center gap-3 px-3 py-2 text-sm text-brand bg-surface-hover font-medium rounded-xl">
+                    <Link to="/dashboard" className="flex items-center gap-3 px-3 py-2 text-sm text-brand bg-surface-hover font-medium rounded-xl">
                         <Kanban size={18} />
                         Kanban Board
                     </Link>

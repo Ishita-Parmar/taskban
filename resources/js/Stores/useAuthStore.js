@@ -15,19 +15,22 @@ export const useAuthStore = create((set) => ({
     },
     
     login: async (credentials) => {
-        await axios.get('/sanctum/csrf-cookie', { baseURL: '' });
         const response = await axios.post('/login', credentials);
+        localStorage.setItem('auth_token', response.data.access_token);
         set({ user: response.data.user });
     },
     
     register: async (credentials) => {
-        await axios.get('/sanctum/csrf-cookie', { baseURL: '' });
         const response = await axios.post('/register', credentials);
+        localStorage.setItem('auth_token', response.data.access_token);
         set({ user: response.data.user });
     },
     
     logout: async () => {
-        await axios.post('/logout');
+        try {
+            await axios.post('/logout');
+        } catch (e) {}
+        localStorage.removeItem('auth_token');
         set({ user: null });
     }
 }));

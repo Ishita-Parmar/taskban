@@ -9,6 +9,8 @@ export default function Dashboard() {
     const [columns, setColumns] = useState([]);
     const [issues, setIssues] = useState({});
     const [loading, setLoading] = useState(true);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [newProject, setNewProject] = useState({ name: '', key: '', description: '' });
 
     useEffect(() => {
         const loadBoard = async () => {
@@ -118,15 +120,87 @@ export default function Dashboard() {
         );
     }
 
+    const handleCreateSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post('/projects', newProject);
+            window.location.reload(); // Reload to fetch projects
+        } catch (error) {
+            alert("Failed to create project. The Key might already be taken.");
+        }
+    };
+
     if (!project) {
         return (
             <AppLayout>
-                <div className="flex-1 flex items-center justify-center flex-col">
+                <div className="flex-1 flex items-center justify-center flex-col relative h-full">
                     <h2 className="text-2xl font-bold text-slate-900 mb-2">No Projects Found</h2>
                     <p className="text-slate-500 mb-6">Create a project to get started with your Kanban board.</p>
-                    <button className="bg-brand hover:bg-brand-hover text-white px-6 py-2.5 rounded-full font-medium shadow-sm transition-colors">
+                    <button 
+                        onClick={() => setShowCreateModal(true)}
+                        className="bg-brand hover:bg-brand-hover text-white px-6 py-2.5 rounded-full font-medium shadow-sm transition-colors"
+                    >
                         Create Project
                     </button>
+                    
+                    {showCreateModal && (
+                        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+                            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 transform transition-all scale-100 animate-in fade-in zoom-in duration-200">
+                                <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">Create New Project</h3>
+                                <form onSubmit={handleCreateSubmit} className="space-y-5 text-left w-full">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-slate-900 mb-1.5">Project Name</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            placeholder="e.g. Website Redesign"
+                                            className="w-full border border-slate-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white hover:bg-surface transition-colors"
+                                            value={newProject.name}
+                                            onChange={e => setNewProject({...newProject, name: e.target.value})}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-slate-900 mb-1.5">Project Key (Short Code)</label>
+                                        <input 
+                                            type="text" 
+                                            required
+                                            maxLength={10}
+                                            placeholder="e.g. TASK"
+                                            className="w-full border border-slate-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand uppercase bg-white hover:bg-surface transition-colors"
+                                            value={newProject.key}
+                                            onChange={e => setNewProject({...newProject, key: e.target.value.toUpperCase()})}
+                                        />
+                                        <p className="text-xs text-slate-500 mt-1.5">Used as a prefix for tasks (e.g., TASK-1).</p>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-slate-900 mb-1.5">Description (Optional)</label>
+                                        <textarea 
+                                            rows="3"
+                                            placeholder="What is this project about?"
+                                            className="w-full border border-slate-border rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white hover:bg-surface transition-colors resize-none"
+                                            value={newProject.description}
+                                            onChange={e => setNewProject({...newProject, description: e.target.value})}
+                                        ></textarea>
+                                    </div>
+                                    <div className="flex gap-3 justify-end pt-4 border-t border-slate-100">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowCreateModal(false)}
+                                            className="px-5 py-2.5 rounded-full text-sm font-semibold text-slate-700 hover:bg-slate-100 transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button 
+                                            type="submit" 
+                                            className="px-6 py-2.5 rounded-full text-sm font-semibold text-white bg-brand hover:bg-brand-hover transition-colors shadow-sm"
+                                        >
+                                            Create Project
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </AppLayout>
         );
