@@ -17,12 +17,23 @@ class CommentController extends Controller
     public function store(Request $request, Issue $issue)
     {
         $validated = $request->validate([
-            'content' => 'required|string'
+            'body' => 'nullable|string',
+            'attachment' => 'nullable|file|max:10240'
         ]);
+
+        if (empty($validated['body']) && !$request->hasFile('attachment')) {
+            return response()->json(['message' => 'Comment or attachment is required'], 422);
+        }
+
+        $attachmentPath = null;
+        if ($request->hasFile('attachment')) {
+            $attachmentPath = $request->file('attachment')->store('attachments', 'public');
+        }
 
         $comment = $issue->comments()->create([
             'user_id' => $request->user()->id,
-            'content' => $validated['content'],
+            'body' => $validated['body'] ?? '',
+            'attachment' => $attachmentPath,
         ]);
 
         $comment->load('user');
@@ -37,7 +48,7 @@ class CommentController extends Controller
         }
 
         $validated = $request->validate([
-            'content' => 'required|string'
+            'body' => 'required|string'
         ]);
 
         $comment->update($validated);

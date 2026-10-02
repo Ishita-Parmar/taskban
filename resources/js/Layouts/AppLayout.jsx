@@ -1,10 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Kanban, List, Settings } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Kanban, List, Settings, BarChart, Calendar } from 'lucide-react';
 import { useAuthStore } from '../Stores/useAuthStore';
 
 export default function AppLayout({ children }) {
-    const { user, logout } = useAuthStore();
+    const { user, logout, fetchUser } = useAuthStore();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (!user) {
+            fetchUser();
+        }
+    }, [user, fetchUser]);
 
     return (
         <div className="flex h-screen w-screen overflow-hidden bg-white">
@@ -23,15 +30,23 @@ export default function AppLayout({ children }) {
                 
                 {/* Navigation Links */}
                 <nav className="flex-1 p-3 space-y-1">
-                    <Link to="/dashboard" className="flex items-center gap-3 px-3 py-2 text-sm text-brand bg-surface-hover font-medium rounded-xl">
+                    <Link to="/dashboard" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/dashboard' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                         <Kanban size={18} />
                         Kanban Board
                     </Link>
-                    <Link to="#" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-500 hover:bg-surface-hover rounded-xl transition-colors">
+                    <Link to="/backlog" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/backlog' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                         <List size={18} />
                         Backlog
                     </Link>
-                    <Link to="#" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-500 hover:bg-surface-hover rounded-xl transition-colors">
+                    <Link to="/reports" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/reports' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                        <BarChart size={18} />
+                        Reports
+                    </Link>
+                    <Link to="/calendar" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/calendar' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                        <Calendar size={18} />
+                        Calendar
+                    </Link>
+                    <Link to="/settings" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/settings' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                         <Settings size={18} />
                         Project Settings
                     </Link>

@@ -11,6 +11,7 @@ class Comment extends Model
         'issue_id',
         'user_id',
         'body',
+        'attachment',
     ];
 
     public function issue(): BelongsTo

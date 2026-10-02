@@ -19,7 +19,7 @@ class IssueActivity extends Model
     protected $fillable = [
         'issue_id',
         'user_id',
-        'field',
+        'activity_type',
         'old_value',
         'new_value',
     ];

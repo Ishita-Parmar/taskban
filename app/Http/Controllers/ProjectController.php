@@ -26,11 +26,47 @@ class ProjectController extends Controller
             'key' => 'required|string|max:10|unique:projects',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'team_members' => 'nullable|string', // comma separated emails
         ]);
 
         $validated['owner_id'] = $request->user()->id;
 
-        $project = Project::create($validated);
+        $project = Project::create([
+            'key' => $validated['key'],
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'owner_id' => $validated['owner_id'],
+        ]);
+
+        // Process team members
+        if (!empty($validated['team_members'])) {
+            $emails = array_map('trim', explode(',', $validated['team_members']));
+            $memberIds = [];
+            
+            foreach ($emails as $email) {
+                if (empty($email)) continue;
+                
+                // Find or create user
+                $user = \App\Models\User::firstOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => explode('@', $email)[0],
+                        'password' => \Illuminate\Support\Facades\Hash::make('password'), // default password
+                        'role' => 'member'
+                    ]
+                );
+                
+                $memberIds[] = $user->id;
+                
+                // Log notification (simulating sending message)
+                \Illuminate\Support\Facades\Log::info("Message sent to $email: You are working in the project '{$project->name}' created by {$request->user()->name}");
+            }
+            
+            // Attach members
+            if (count($memberIds) > 0) {
+                $project->members()->attach($memberIds, ['role' => 'member']);
+            }
+        }
 
         // Add default board columns (To Do, In Progress, Done)
         $project->columns()->createMany([

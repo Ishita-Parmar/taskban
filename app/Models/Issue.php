@@ -24,6 +24,7 @@ class Issue extends Model
         'summary',
         'description',
         'priority',
+        'deadline',
         'position',
     ];
 

@@ -11,7 +11,7 @@ class IssueController extends Controller
     public function index(Request $request, Project $project)
     {
         $issues = $project->issues()
-            ->with(['assignee', 'reporter', 'column'])
+            ->with(['assignee', 'reporter', 'column', 'comments.user'])
             ->orderBy('position')
             ->get();
             
@@ -26,8 +26,21 @@ class IssueController extends Controller
             'summary' => 'required|string|max:255',
             'description' => 'nullable|string',
             'priority' => 'required|string',
+            'deadline' => 'nullable|date',
             'assignee_id' => 'nullable|exists:users,id',
+            'assignee_name' => 'nullable|string|max:255',
         ]);
+
+        if (!empty($validated['assignee_name'])) {
+            $user = \App\Models\User::firstOrCreate(
+                ['name' => $validated['assignee_name']],
+                ['email' => strtolower(str_replace(' ', '', $validated['assignee_name'])) . rand(100,9999) . '@example.com', 'password' => bcrypt('password')]
+            );
+            if (!$project->members()->where('user_id', $user->id)->exists()) {
+                $project->members()->attach($user->id, ['role' => 'member']);
+            }
+            $validated['assignee_id'] = $user->id;
+        }
 
         $validated['reporter_id'] = $request->user()->id;
         $validated['issue_key'] = $project->nextIssueKey();
@@ -56,9 +69,22 @@ class IssueController extends Controller
             'description' => 'nullable|string',
             'type' => 'sometimes|string',
             'priority' => 'sometimes|string',
+            'deadline' => 'nullable|date',
             'assignee_id' => 'nullable|exists:users,id',
+            'assignee_name' => 'nullable|string|max:255',
             'board_column_id' => 'sometimes|exists:board_columns,id',
         ]);
+
+        if (!empty($validated['assignee_name'])) {
+            $user = \App\Models\User::firstOrCreate(
+                ['name' => $validated['assignee_name']],
+                ['email' => strtolower(str_replace(' ', '', $validated['assignee_name'])) . rand(100,9999) . '@example.com', 'password' => bcrypt('password')]
+            );
+            if (!$project->members()->where('user_id', $user->id)->exists()) {
+                $project->members()->attach($user->id, ['role' => 'member']);
+            }
+            $validated['assignee_id'] = $user->id;
+        }
 
         $issue->update($validated);
         $issue->load(['assignee', 'reporter', 'column']);
