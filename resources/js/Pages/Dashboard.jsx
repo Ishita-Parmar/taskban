@@ -325,9 +325,7 @@ export default function Dashboard() {
                     <div className="flex items-center gap-2 border-l border-slate-200 pl-6">
                         <span className="text-sm font-medium text-slate-500">Team:</span>
                         <div className="flex flex-wrap gap-2">
-                            {project.members && project.members
-                                .filter(member => Object.values(issues).flat().some(issue => issue.assignee?.id === member.id))
-                                .map(member => (
+                            {project.members && project.members.map(member => (
                                 <button 
                                     key={member.id}
                                     onClick={() => handleMemberClick(member)}
@@ -337,7 +335,7 @@ export default function Dashboard() {
                                     {member.name}
                                 </button>
                             ))}
-                            {(!project.members || project.members.filter(member => Object.values(issues).flat().some(issue => issue.assignee?.id === member.id)).length === 0) && (
+                            {(!project.members || project.members.length === 0) && (
                                 <span className="text-xs text-slate-400 italic">No active members</span>
                             )}
                         </div>

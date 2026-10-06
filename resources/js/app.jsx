@@ -14,6 +14,8 @@ import ProjectSettings from './Pages/ProjectSettings';
 import MemberDashboard from './Pages/MemberDashboard';
 import Reports from './Pages/Reports';
 import CalendarView from './Pages/Calendar';
+import SuperAdminDashboard from './Pages/SuperAdminDashboard';
+import TeamMemberDashboard from './Pages/TeamMemberDashboard';
 
 const rootElement = document.getElementById('root');
 if (rootElement) {
@@ -29,6 +31,8 @@ if (rootElement) {
                     <Route path="/settings" element={<ProjectSettings />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/calendar" element={<CalendarView />} />
+                    <Route path="/super-admin" element={<SuperAdminDashboard />} />
+                    <Route path="/team-member" element={<TeamMemberDashboard />} />
                     <Route path="/member/:memberId/dashboard" element={<MemberDashboard />} />
                     <Route path="/*" element={<Welcome />} />
                 </Routes>

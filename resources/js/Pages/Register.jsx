@@ -8,13 +8,16 @@ export default function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('manager');
     const [error, setError] = useState('');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await register({ name, email, password });
-            navigate('/dashboard');
+            await register({ name, email, password, role });
+            if (role === 'admin') navigate('/super-admin');
+            else if (role === 'member') navigate('/team-member');
+            else navigate('/dashboard');
         } catch (err) {
             setError('Registration failed. Please check your details.');
         }
@@ -42,6 +45,7 @@ export default function Register() {
                             value={name}
                             onChange={e => setName(e.target.value)}
                             required 
+                            autoComplete="name"
                             placeholder="Jane Doe"
                         />
                     </div>
@@ -53,6 +57,7 @@ export default function Register() {
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required 
+                            autoComplete="email"
                             placeholder="you@example.com"
                         />
                     </div>
@@ -64,8 +69,21 @@ export default function Register() {
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required 
+                            autoComplete="new-password"
                             placeholder="••••••••"
                         />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-slate-900 mb-1.5">Role</label>
+                        <select 
+                            className="w-full border border-slate-border rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand bg-white hover:bg-surface transition-colors"
+                            value={role}
+                            onChange={e => setRole(e.target.value)}
+                        >
+                            <option value="manager">Manager</option>
+                            <option value="member">Team Member</option>
+                            <option value="admin">Super Admin</option>
+                        </select>
                     </div>
                     <button 
                         type="submit" 

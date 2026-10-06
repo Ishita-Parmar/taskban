@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->string('attachment')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('plain_password')->nullable();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('attachment');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('plain_password');
         });
     }
 };

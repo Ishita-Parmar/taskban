@@ -12,6 +12,11 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/super-admin/data', [\App\Http\Controllers\SuperAdminController::class, 'dashboardData']);
+    Route::post('/super-admin/managers', [\App\Http\Controllers\SuperAdminController::class, 'createManager']);
+    Route::post('/super-admin/users/{user}/grant-manager', [\App\Http\Controllers\SuperAdminController::class, 'grantManager']);
+    Route::post('/super-admin/users/{user}/revoke-manager', [\App\Http\Controllers\SuperAdminController::class, 'revokeManager']);
+    Route::get('/my-tasks', [\App\Http\Controllers\MyTasksController::class, 'index']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
     

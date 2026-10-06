@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Kanban, List, Settings, BarChart, Calendar } from 'lucide-react';
+import { Kanban, List, Settings, BarChart, Calendar, User as UserIcon, Shield, Users, Briefcase, Activity, ShieldCheck, FileText } from 'lucide-react';
 import { useAuthStore } from '../Stores/useAuthStore';
 
 export default function AppLayout({ children }) {
@@ -30,26 +30,70 @@ export default function AppLayout({ children }) {
                 
                 {/* Navigation Links */}
                 <nav className="flex-1 p-3 space-y-1">
-                    <Link to="/dashboard" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/dashboard' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                        <Kanban size={18} />
-                        Kanban Board
-                    </Link>
-                    <Link to="/backlog" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/backlog' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                        <List size={18} />
-                        Backlog
-                    </Link>
-                    <Link to="/reports" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/reports' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                        <BarChart size={18} />
-                        Reports
-                    </Link>
-                    <Link to="/calendar" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/calendar' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                        <Calendar size={18} />
-                        Calendar
-                    </Link>
-                    <Link to="/settings" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/settings' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                        <Settings size={18} />
-                        Project Settings
-                    </Link>
+                    {user?.role === 'member' && (
+                        <Link to="/team-member" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/team-member' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                            <UserIcon size={18} />
+                            My Dashboard
+                        </Link>
+                    )}
+
+                    {user?.role === 'admin' && (
+                        <>
+                            <Link to="/super-admin?tab=overview" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=overview') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Shield size={18} />
+                                Overview
+                            </Link>
+                            <Link to="/super-admin?tab=users" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=users') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Users size={18} />
+                                Users
+                            </Link>
+                            <Link to="/super-admin?tab=projects" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=projects') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Briefcase size={18} />
+                                Projects
+                            </Link>
+                            <Link to="/super-admin?tab=tasks" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=tasks') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <List size={18} />
+                                All Tasks
+                            </Link>
+                            <Link to="/super-admin?tab=reports" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=reports') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <BarChart size={18} />
+                                Reports
+                            </Link>
+                            <Link to="/super-admin?tab=activity" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=activity') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Activity size={18} />
+                                Activity Log
+                            </Link>
+                            <Link to="/super-admin?tab=roles" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=roles') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <ShieldCheck size={18} />
+                                Roles & Permissions
+                            </Link>
+                        </>
+                    )}
+
+                    {user?.role === 'manager' && (
+                        <>
+                            <Link to="/dashboard" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/dashboard' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Kanban size={18} />
+                                Kanban Board
+                            </Link>
+                            <Link to="/backlog" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/backlog' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <List size={18} />
+                                Backlog
+                            </Link>
+                            <Link to="/reports" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/reports' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <BarChart size={18} />
+                                Reports
+                            </Link>
+                            <Link to="/calendar" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/calendar' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Calendar size={18} />
+                                Calendar
+                            </Link>
+                            <Link to="/settings" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/settings' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Settings size={18} />
+                                Project Settings
+                            </Link>
+                        </>
+                    )}
                 </nav>
                 
                 {/* User Info / Logout */}

@@ -16,12 +16,14 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'role' => 'sometimes|string|in:manager,member,admin'
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role' => $validated['role'] ?? 'member',
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -38,6 +40,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'role' => 'sometimes|string|in:manager,member,admin'
         ]);
 
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -47,6 +50,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
+        
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([

@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->string('attachment')->nullable();
+        Schema::table('projects', function (Blueprint $table) {
+            $table->date('start_date')->nullable();
+            $table->date('deadline')->nullable();
+            $table->date('completed_at')->nullable();
         });
     }
 
@@ -21,8 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('attachment');
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn(['start_date', 'deadline', 'completed_at']);
         });
     }
 };
