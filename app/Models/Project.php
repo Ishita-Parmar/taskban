@@ -45,7 +45,7 @@ class Project extends Model
     {
         $maxNumber = $this->issues()
             ->withTrashed()
-            ->selectRaw("MAX(CAST(SUBSTR(issue_key, LENGTH(?) + 2) AS INTEGER)) as max_num", [$this->key])
+            ->selectRaw("MAX(CAST(SUBSTR(issue_key, LENGTH(?) + 2) AS UNSIGNED)) as max_num", [$this->key])
             ->value('max_num');
 
         $nextNumber = ($maxNumber ?? 0) + 1;

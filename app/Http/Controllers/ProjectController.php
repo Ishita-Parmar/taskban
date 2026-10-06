@@ -15,7 +15,15 @@ class ProjectController extends Controller
         $projects = Project::where('owner_id', $user->id)
             ->orWhereHas('members', function($q) use ($user) {
                 $q->where('user_id', $user->id);
-            })->with('owner')->get();
+            })
+            ->with('owner')
+            ->withCount('issues')
+            ->withCount(['issues as done_issues_count' => function ($query) {
+                $query->whereHas('column', function ($q) {
+                    $q->where('name', 'Done');
+                });
+            }])
+            ->get();
             
         return response()->json($projects);
     }
@@ -26,6 +34,8 @@ class ProjectController extends Controller
             'key' => 'required|string|max:10|unique:projects',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'start_date' => 'nullable|date',
+            'deadline' => 'nullable|date',
             'team_members' => 'nullable|string', // comma separated emails
         ]);
 
@@ -35,6 +45,8 @@ class ProjectController extends Controller
             'key' => $validated['key'],
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
+            'start_date' => $validated['start_date'] ?? null,
+            'deadline' => $validated['deadline'] ?? null,
             'owner_id' => $validated['owner_id'],
         ]);
 
@@ -68,11 +80,12 @@ class ProjectController extends Controller
             }
         }
 
-        // Add default board columns (To Do, In Progress, Done)
+        // Add default board columns (To Do, In Progress, Testing, Done)
         $project->columns()->createMany([
             ['name' => 'To Do', 'position' => 1000],
             ['name' => 'In Progress', 'position' => 2000],
-            ['name' => 'Done', 'position' => 3000],
+            ['name' => 'Testing', 'position' => 3000],
+            ['name' => 'Done', 'position' => 4000],
         ]);
 
         return response()->json($project, 201);
@@ -80,7 +93,7 @@ class ProjectController extends Controller
 
     public function show(Request $request, Project $project)
     {
-        $project->load(['columns', 'members', 'owner']);
+        $project->load(['columns.issues.assignee', 'members', 'owner']);
         return response()->json($project);
     }
 

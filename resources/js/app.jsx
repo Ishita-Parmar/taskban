@@ -6,6 +6,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // Pages
 import Dashboard from './Pages/Dashboard';
+import Projects from './Pages/Projects';
+import ProjectOverview from './Pages/ProjectOverview';
+import ProjectWorkspaceOverview from './Pages/ProjectWorkspaceOverview';
+import ProjectBoard from './Pages/ProjectBoard';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Welcome from './Pages/Welcome';
@@ -27,6 +31,15 @@ if (rootElement) {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/projects/:id" element={<ProjectOverview />} />
+                    <Route path="/project-workspace/:id/overview" element={<ProjectWorkspaceOverview />} />
+                    <Route path="/project-workspace/:id/board" element={<ProjectBoard />} />
+                    
+                    {/* The following routes currently don't use the project ID in their path.
+                        They will need to be updated to match the new ProjectLayout sidebar, 
+                        e.g., /project-workspace/:id/board, etc. 
+                        We keep them here for now so they don't break. */}
                     <Route path="/backlog" element={<Backlog />} />
                     <Route path="/settings" element={<ProjectSettings />} />
                     <Route path="/reports" element={<Reports />} />

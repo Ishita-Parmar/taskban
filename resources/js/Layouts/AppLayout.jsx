@@ -30,14 +30,7 @@ export default function AppLayout({ children }) {
                 
                 {/* Navigation Links */}
                 <nav className="flex-1 p-3 space-y-1">
-                    {user?.role === 'member' && (
-                        <Link to="/team-member" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/team-member' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                            <UserIcon size={18} />
-                            My Dashboard
-                        </Link>
-                    )}
-
-                    {user?.role === 'admin' && (
+                    {user?.role === 'admin' ? (
                         <>
                             <Link to="/super-admin?tab=overview" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/super-admin' && location.search.includes('tab=overview') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                                 <Shield size={18} />
@@ -68,29 +61,35 @@ export default function AppLayout({ children }) {
                                 Roles & Permissions
                             </Link>
                         </>
-                    )}
-
-                    {user?.role === 'manager' && (
+                    ) : (
                         <>
                             <Link to="/dashboard" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/dashboard' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                                <Kanban size={18} />
-                                Kanban Board
+                                <Activity size={18} />
+                                Dashboard
                             </Link>
-                            <Link to="/backlog" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/backlog' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                            <Link to="/projects" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname.startsWith('/projects') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Briefcase size={18} />
+                                Projects
+                            </Link>
+                            <Link to="/my-tasks" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/my-tasks' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                                 <List size={18} />
-                                Backlog
+                                My Tasks
+                            </Link>
+                            <Link to="/team" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/team' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <Users size={18} />
+                                Team
                             </Link>
                             <Link to="/reports" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/reports' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                                 <BarChart size={18} />
                                 Reports
                             </Link>
-                            <Link to="/calendar" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/calendar' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
-                                <Calendar size={18} />
-                                Calendar
+                            <Link to="/notifications" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/notifications' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
+                                <ShieldCheck size={18} />
+                                Notifications
                             </Link>
                             <Link to="/settings" className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname === '/settings' ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover'}`}>
                                 <Settings size={18} />
-                                Project Settings
+                                Settings
                             </Link>
                         </>
                     )}
