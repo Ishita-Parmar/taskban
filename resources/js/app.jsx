@@ -14,6 +14,8 @@ import Login from './Pages/Login';
 import Register from './Pages/Register';
 import Welcome from './Pages/Welcome';
 import Backlog from './Pages/Backlog';
+import Issues from './Pages/Issues';
+import Team from './Pages/Team';
 import ProjectSettings from './Pages/ProjectSettings';
 import MemberDashboard from './Pages/MemberDashboard';
 import Reports from './Pages/Reports';
@@ -35,12 +37,13 @@ if (rootElement) {
                     <Route path="/projects/:id" element={<ProjectOverview />} />
                     <Route path="/project-workspace/:id/overview" element={<ProjectWorkspaceOverview />} />
                     <Route path="/project-workspace/:id/board" element={<ProjectBoard />} />
-                    
                     {/* The following routes currently don't use the project ID in their path.
                         They will need to be updated to match the new ProjectLayout sidebar, 
                         e.g., /project-workspace/:id/board, etc. 
                         We keep them here for now so they don't break. */}
-                    <Route path="/backlog" element={<Backlog />} />
+                    <Route path="/project-workspace/:id/backlog" element={<Backlog />} />
+                    <Route path="/project-workspace/:id/issues" element={<Issues />} />
+                    <Route path="/project-workspace/:id/team" element={<Team />} />
                     <Route path="/settings" element={<ProjectSettings />} />
                     <Route path="/reports" element={<Reports />} />
                     <Route path="/calendar" element={<CalendarView />} />

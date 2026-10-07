@@ -135,25 +135,7 @@ export default function SuperAdminDashboard() {
                     </div>
                 </div>
 
-            <div className="bg-white rounded-3xl border border-slate-border shadow-sm p-6 mt-8">
-                <h3 className="text-lg font-bold text-slate-900 mb-4">Recent Activity</h3>
-                <div className="space-y-4">
-                    {data.recentActivity.length === 0 && <p className="text-slate-500 text-sm">No recent activity.</p>}
-                    {data.recentActivity.map(act => (
-                        <div key={act.id} className="flex gap-4 items-start pb-4 border-b border-slate-100 last:border-0 last:pb-0">
-                            <div className="w-8 h-8 rounded-full bg-brand/10 text-brand flex items-center justify-center text-xs font-bold shrink-0">
-                                {act.user?.name?.substring(0,2).toUpperCase()}
-                            </div>
-                            <div>
-                                <p className="text-sm text-slate-900">
-                                    <span className="font-semibold">{act.user?.name}</span> {act.description}
-                                </p>
-                                <p className="text-xs text-slate-400 mt-0.5">{new Date(act.created_at).toLocaleString()}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+
         </div>
     );
 

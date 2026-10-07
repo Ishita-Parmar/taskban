@@ -92,20 +92,6 @@ export default function ProjectLayout({ children }) {
                         <Users size={18} />
                         Team
                     </Link>
-                    
-                    <Link to={`/project-workspace/${id}/reports`} className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname.includes('/reports') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover hover:text-slate-900'}`}>
-                        <BarChart size={18} />
-                        Reports
-                    </Link>
-                    
-                    <div className="px-3 pb-2 pt-6">
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Configuration</span>
-                    </div>
-
-                    <Link to={`/project-workspace/${id}/settings`} className={`flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-xl transition-colors ${location.pathname.includes('/settings') ? 'text-brand bg-surface-hover' : 'text-slate-500 hover:bg-surface-hover hover:text-slate-900'}`}>
-                        <Settings size={18} />
-                        Settings
-                    </Link>
                 </nav>
                 
                 {/* User Info / Logout */}

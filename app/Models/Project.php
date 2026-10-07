@@ -14,6 +14,7 @@ class Project extends Model
         'name',
         'description',
         'owner_id',
+        'backlog_text',
     ];
 
     public function owner(): BelongsTo

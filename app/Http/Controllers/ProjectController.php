@@ -102,6 +102,7 @@ class ProjectController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
+            'backlog_text' => 'nullable|string',
         ]);
 
         $project->update($validated);
